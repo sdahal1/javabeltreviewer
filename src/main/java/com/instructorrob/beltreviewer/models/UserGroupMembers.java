@@ -79,6 +79,7 @@ public class UserGroupMembers {
     	
     }
 
+    
 	public UserGroupMembers(User user, Group group) {
 		this.user = user;
 		this.group = group;

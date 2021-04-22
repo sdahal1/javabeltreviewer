@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.instructorrob.beltreviewer.models.Group;
 import com.instructorrob.beltreviewer.models.User;
+import com.instructorrob.beltreviewer.models.UserGroupMembers;
 import com.instructorrob.beltreviewer.repositories.GroupRepository;
 import com.instructorrob.beltreviewer.repositories.UserGroupMembersRepository;
 import com.instructorrob.beltreviewer.repositories.UserRepository;
@@ -67,6 +68,38 @@ public class UserService {
     public Group createGroup(Group group) {
     		return this.groupRepository.save(group);
     }
+    
+    public List<Group> findAllGroups(){
+    		return (List<Group>)this.groupRepository.findAll();
+    }
+    
+    public Group findAGroup(Long id) {
+    		return this.groupRepository.findById(id).orElse(null);
+    }
+    
+    public Group updateAGroup(Group group) {
+    		return this.groupRepository.save(group);
+    }
+    
+    public void deleteGroup(Group group) {
+    		this.groupRepository.delete(group);
+    }
+    
+    public UserGroupMembers createAssociation(UserGroupMembers ugm) {
+    	
+    		return this.userGroupMembersRepository.save(ugm);
+    }
+    
+    
+    public User leaveGroup(User u) {
+    		return this.userRepository.save(u);
+    }
+    
+    public List<Group> findGroupsNotBelongingTo(User u){
+    		return this.groupRepository.findBymembersNotContaining(u);
+    }
+    
+    
 }
 
 

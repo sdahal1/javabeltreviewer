@@ -19,35 +19,87 @@
     <table class="table">
         <thead>
           <tr>
-            <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
+            <th scope="col">Name</th>
+            <th scope="col">Creator</th>
+            <th scope="col">Vice President</th>
+            <th scope="col">Number of Members</th>
+            <th scope="col">Action</th>
+
+
           </tr>
         </thead>
         <tbody>
+            <c:forEach items='${ allgroups }' var='g'>
           <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
+            
+            <td><a href="/groups/${g.id}">${g.name}</a></td>
+            <td>${g.creator.firstName} ${g.creator.lastName}</td>
+            <td>${g.vp.firstName}</td>
+            <td>${g.members.size()}</td>
+            <td>
+                <c:choose>
+                    <c:when test="${g.members.contains(loggedinuser)}">
+                        <a href="/leave/${g.id}">Leave</a>
+                    </c:when>
+                    <c:otherwise>
+                        <a href="/join/${g.id}">Join</a>
+
+                    </c:otherwise>
+                </c:choose>
+            
+            </td>
+
           </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td>Larry</td>
-            <td>the Bird</td>
-            <td>@twitter</td>
-          </tr>
+            </c:forEach>
         </tbody>
       </table>
 
+
+      <h3>Groups Im not in yet</h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Creator</th>
+            <th scope="col">Vice President</th>
+            <th scope="col">Number of Members</th>
+            <th scope="col">Action</th>
+
+
+          </tr>
+        </thead>
+        <tbody>
+            <c:forEach items='${ notmygroups }' var='g'>
+          <tr>
+            
+            <td><a href="/groups/${g.id}">${g.name}</a></td>
+            <td>${g.creator.firstName} ${g.creator.lastName}</td>
+            <td>${g.vp.firstName}</td>
+            <td>${g.members.size()}</td>
+            <td>
+                <c:choose>
+                    <c:when test="${g.members.contains(loggedinuser)}">
+                        <a href="/leave/${g.id}">Leave</a>
+                    </c:when>
+                    <c:otherwise>
+                        <a href="/join/${g.id}">Join</a>
+
+                    </c:otherwise>
+                </c:choose>
+            
+            </td>
+
+          </tr>
+            </c:forEach>
+        </tbody>
+      </table>
+
+
       <a href="/groups/new"><button class="btn btn-primary">Add a new group!</button></a>
+
+
+
+
     
     <a href="/logout">Logout</a>
 </body>
