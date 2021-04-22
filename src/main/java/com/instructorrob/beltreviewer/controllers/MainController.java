@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.instructorrob.beltreviewer.models.Group;
 import com.instructorrob.beltreviewer.models.User;
 import com.instructorrob.beltreviewer.services.UserService;
 import com.instructorrob.beltreviewer.validation.UserValidator;
@@ -55,16 +56,7 @@ public class MainController {
 		return "redirect:/dashboard";
 	}
 	
-	@GetMapping("/dashboard")
-	public String dashboard(Model model, HttpSession session) {
-		//retrieve the userobject from the db who'se id matches the id stored in session
-		Long id = (Long)session.getAttribute("userid");
-		User loggedinuser = this.userService.findUserById(id);
-		
-		model.addAttribute("loggedinuser", loggedinuser);
-		return "dashboard.jsp";
-		
-	}
+
 	
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
@@ -91,6 +83,58 @@ public class MainController {
 		redirectAttributes.addFlashAttribute("error", "Invalid login attempt");
 		return "redirect:/";
 	}
+	
+	//////////////////////REST OF BELT STARTS HERE///////////
+	
+	@GetMapping("/dashboard")
+	public String dashboard(Model model, HttpSession session) {
+		//retrieve the userobject from the db who'se id matches the id stored in session
+		Long id = (Long)session.getAttribute("userid");
+		User loggedinuser = this.userService.findUserById(id);
+		
+		model.addAttribute("loggedinuser", loggedinuser);
+		return "dashboard.jsp";
+		
+	}
+	
+	@GetMapping("/groups/new")
+	public String newGroup(@ModelAttribute("group") Group group, Model model) {
+		
+		model.addAttribute("allusers", this.userService.findAllUsers() );
+		
+		return "newgroup.jsp";
+	}
+	
+	@PostMapping("/groups/create")
+	public String createGroup(@Valid @ModelAttribute("group") Group group, BindingResult result, Model model, HttpSession session) {
+		
+		if(result.hasErrors()) {
+			
+			model.addAttribute("allusers", this.userService.findAllUsers() );
+			return "newgroup.jsp";
+		}
+		
+		//grab the logged in user so we can assign this user to be the group's creator
+		Long id = (Long)session.getAttribute("userid");
+		User loggedinuser = this.userService.findUserById(id);
+		
+		group.setCreator(loggedinuser);
+		
+		this.userService.createGroup(group);
+		
+		return "redirect:/dashboard";
+	}
+	
+	
+//	@RequestMapping(value="/books", method=RequestMethod.POST)
+//    public String create(@Valid @ModelAttribute("book") Book book, BindingResult result) {
+//        if (result.hasErrors()) {
+//            return "/books/new.jsp";
+//        } else {
+//            bookService.createBook(book);
+//            return "redirect:/books";
+//        }
+//    }
 	
 	
 	

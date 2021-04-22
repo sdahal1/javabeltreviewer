@@ -1,17 +1,26 @@
 package com.instructorrob.beltreviewer.services;
 
+import java.util.List;
+
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
+import com.instructorrob.beltreviewer.models.Group;
 import com.instructorrob.beltreviewer.models.User;
+import com.instructorrob.beltreviewer.repositories.GroupRepository;
+import com.instructorrob.beltreviewer.repositories.UserGroupMembersRepository;
 import com.instructorrob.beltreviewer.repositories.UserRepository;
 
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final GroupRepository groupRepository;
+    private final UserGroupMembersRepository userGroupMembersRepository;
     
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, GroupRepository groupRepository, UserGroupMembersRepository userGroupMembersRepository   ) {
         this.userRepository = userRepository;
+        this.groupRepository = groupRepository;
+        this.userGroupMembersRepository = userGroupMembersRepository;
     }
     
     // register user and hash their password
@@ -49,4 +58,21 @@ public class UserService {
             }
         }
     }
+    
+    public List<User> findAllUsers(){
+    		return (List<User>)this.userRepository.findAll();	
+    }
+    
+    
+    public Group createGroup(Group group) {
+    		return this.groupRepository.save(group);
+    }
 }
+
+
+
+
+
+
+
+
