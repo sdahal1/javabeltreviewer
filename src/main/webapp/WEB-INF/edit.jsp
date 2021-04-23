@@ -16,6 +16,7 @@
 <body>
     <h1>Edit this group:</h1>
     <form:form action="/groups/update/${group.id}" method="post" modelAttribute="group">
+    
             <p>
                 <form:label path="name">Name</form:label>
                 <form:errors path="name"/>
@@ -31,9 +32,18 @@
                 <form:errors path="vp"/>
                 <form:select path="vp">
                     <c:forEach items='${ allusers }' var='u'>
-                        <form:option value="${u.id}">${u.firstName}</form:option>
+                        <c:choose>
+                            <c:when test="${group.vp==u}">
+                                <form:option value="${u.id}" selected="selected">${u.firstName}</form:option>
+                            </c:when>
+                            <c:otherwise>
+                                <form:option value="${u.id}">${u.firstName}</form:option>
+
+                            </c:otherwise>
+                        </c:choose>
                     </c:forEach>
                 </form:select>
+                
 
             </p>
             

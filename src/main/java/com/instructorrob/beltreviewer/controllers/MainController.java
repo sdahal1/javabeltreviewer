@@ -146,6 +146,7 @@ public class MainController {
 	public String editGroup(@PathVariable("id") Long id, Model model) {
 		
 		model.addAttribute("group", this.userService.findAGroup(id));
+		
 		model.addAttribute("allusers", this.userService.findAllUsers() );
 		
 		return "edit.jsp";
@@ -163,7 +164,13 @@ public class MainController {
 		//send the group info to service to update
 		System.out.println("********************");
 		System.out.println(group.getId());
-		System.out.println(group.getCreator());
+		System.out.println(group.getName());
+		System.out.println(group.getMembers());
+		
+		Group g = this.userService.findAGroup(id);
+		group.setMembers(g.getMembers());
+//		
+		
 		Long loggedinuserid = (Long)session.getAttribute("userid");
 		User loggedinuser = this.userService.findUserById(loggedinuserid);
 		
